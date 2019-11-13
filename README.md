@@ -1,5 +1,5 @@
 # MotifsBellPaegle
-Files accompanying manuscript (in review) by Bell & Paegle.
+This repository contains files accompanying manuscript (in review) by Bell & Paegle.
 
 The primary code is found in motifAnalysisBellPaegle.R and all other files are called from this script. To start, 
 1. Download all files to a single folder
