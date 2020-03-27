@@ -1,6 +1,6 @@
 # ----------------------
 # ANALYSIS FOR BELL & PAEGLE
-# Ethnic Markers and How to Find Them: An Ethnographic Investigation of Marker Presence, Recognition, and Social Influence
+# Ethnic Markers and How to Find Them: An Ethnographic Investigation of Marker Presence, Recognition, and Transmission
 # University of Utah
 # ----------------------
 # packages you will need
@@ -14,6 +14,7 @@ require(stats)
 
 # data directory REPLACE TEXT WITH THE CORRECT DIRECTORY
 datadir <- function(x="") paste0("Directory where the data files are","/",x)
+
 setwd(datadir())
 d <- read.csv( file=datadir("DesignsSurveyTonga2016short.csv"), header=TRUE, stringsAsFactors=FALSE, nrows=70)
 
@@ -154,6 +155,7 @@ triad.sim <- function( d, dmn="motif" ){
 }
 
 # create similarity matrix bewteen US and Tonga participants
+# takes about a minute or so
 mtf.Tonga.US <- rep( list(0),sum( length(d.not), length(d.all.tonga ) ) )
 for( i in 1:sum( length(d.not), length(d.all.tonga ) ) ){
  if( i<=length(d.not) ){ 
@@ -208,8 +210,25 @@ loc <- cmdscale(1-mtf.tonga.us.mtrx)
 x <- loc[, 1]
 y <- -loc[, 2]
 
+# visualize
 # FIGURE 3
 plot(x, y, type = "n", xlab = "", ylab = "", asp = 1, axes = FALSE,
      main = "")
 points(x, y, pch=ifelse(mtxlabels=="T", 1, 19), cex = 1)
 legend( "topright", box.lwd=0.3, pch=c(1,19), legend=c("Tonga","US"))
+axis(1)
+axis(2)
+
+# A reviewer suggested using a formal clustering method
+# another package
+require(fpc)
+dissim <- 1-mtf.tonga.us.mtrx # dissimilarity matrix
+cl <- pamk( dissim ) # returns a clustering vector, identifying two clusters
+# the clusters returning from above, visualized by color:
+plot(x, y, type = "n", xlab = "", ylab = "", asp = 1, axes = FALSE,
+     main = "")
+points(x, y, pch=ifelse(mtxlabels=="T", 1, 19), cex = 1, col=ifelse(cl$pamobject$clustering==1, "black", "red"))
+legend( "topright", box.lwd=0.3, pch=c(1,19), legend=c("Tonga","US"))
+axis(1)
+axis(2)
+
